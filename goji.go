@@ -1,4 +1,4 @@
-// Package goji provide functional utility for Slice.
+// Package goji provides functional utils for int / float / string Slice.
 package goji
 
 import (
