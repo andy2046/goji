@@ -87,4 +87,18 @@ func main() {
 
 	fmt.Println(i.Equal([]string{"d", "n", "a"}, []string{"d", "n", "a"}))
 
+	camelCase := i.CamelCase
+
+	fmt.Println(camelCase("foo-bar-baz"))
+	// fooBarBaz
+	fmt.Println(camelCase("foo_bar"))
+	// fooBar
+	fmt.Println(camelCase("Foo-Bar"))
+	// fooBar
+	fmt.Println(camelCase("Foo-Bar", true))
+	// FooBar
+	fmt.Println(camelCase("--foo.bar"))
+	// fooBar
+	fmt.Println(camelCase("foo bar"))
+	// fooBar
 }

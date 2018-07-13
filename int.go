@@ -58,7 +58,8 @@ type IntHelper interface {
 
 // NewInt creates a new Int instance.
 func NewInt() *Int {
-	return &Int{}
+	var p *Int
+	return p
 }
 
 var _ IntHelper = NewInt()
@@ -648,12 +649,14 @@ func (i *Int) Uniq(ints []int) []int {
 }
 
 // Equal performs a deep comparison between two slice values.
-func (i *Int) Equal(s1, s2 []int) bool {
+func (*Int) Equal(s1, s2 []int) bool {
 	if len(s1) != len(s2) {
 		return false
 	}
-	if i.String(s1) != i.String(s2) {
-		return false
+	for i, v := range s1 {
+		if v != s2[i] {
+			return false
+		}
 	}
 	return true
 }

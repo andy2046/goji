@@ -60,7 +60,8 @@ type Int32Helper interface {
 
 // NewInt32 creates a new Int32 instance.
 func NewInt32() *Int32 {
-	return &Int32{}
+	var p *Int32
+	return p
 }
 
 var _ Int32Helper = NewInt32()
@@ -666,12 +667,14 @@ func (i *Int32) Uniq(ints []int32) []int32 {
 }
 
 // Equal performs a deep comparison between two slice values.
-func (i *Int32) Equal(s1, s2 []int32) bool {
+func (*Int32) Equal(s1, s2 []int32) bool {
 	if len(s1) != len(s2) {
 		return false
 	}
-	if i.String(s1) != i.String(s2) {
-		return false
+	for i, v := range s1 {
+		if v != s2[i] {
+			return false
+		}
 	}
 	return true
 }

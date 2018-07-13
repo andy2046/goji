@@ -60,7 +60,8 @@ type Int64Helper interface {
 
 // NewInt64 creates a new Int64 instance.
 func NewInt64() *Int64 {
-	return &Int64{}
+	var p *Int64
+	return p
 }
 
 var _ Int64Helper = NewInt64()
@@ -666,12 +667,14 @@ func (i *Int64) Uniq(ints []int64) []int64 {
 }
 
 // Equal performs a deep comparison between two slice values.
-func (i *Int64) Equal(s1, s2 []int64) bool {
+func (*Int64) Equal(s1, s2 []int64) bool {
 	if len(s1) != len(s2) {
 		return false
 	}
-	if i.String(s1) != i.String(s2) {
-		return false
+	for i, v := range s1 {
+		if v != s2[i] {
+			return false
+		}
 	}
 	return true
 }
