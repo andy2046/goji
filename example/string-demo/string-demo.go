@@ -87,18 +87,42 @@ func main() {
 
 	fmt.Println(i.Equal([]string{"d", "n", "a"}, []string{"d", "n", "a"}))
 
-	camelCase := i.CamelCase
+	CamelCase := i.CamelCase
+	Titleize := i.Titleize
+	SnakeCase := i.SnakeCase
+	KebabCase := i.KebabCase
 
-	fmt.Println(camelCase("foo-bar-baz"))
+	fmt.Println(CamelCase("foo-bar-baz"))
 	// fooBarBaz
-	fmt.Println(camelCase("foo_bar"))
+	fmt.Println(CamelCase("foo_bar"))
 	// fooBar
-	fmt.Println(camelCase("Foo-Bar"))
+	fmt.Println(CamelCase("Foo-Bar"))
 	// fooBar
-	fmt.Println(camelCase("Foo-Bar", true))
+	fmt.Println(CamelCase("Foo-Bar", true))
 	// FooBar
-	fmt.Println(camelCase("--foo.bar"))
+	fmt.Println(CamelCase("--foo.bar"))
 	// fooBar
-	fmt.Println(camelCase("foo bar"))
+	fmt.Println(CamelCase("foo bar"))
 	// fooBar
+
+	fmt.Println(Titleize("foo bar"))
+	// Foo Bar
+
+	fmt.Println(SnakeCase("v2Counter"))
+	// v2_counter
+	fmt.Println(SnakeCase("fooBar2"))
+	// foo_bar2
+	fmt.Println(SnakeCase("convert1FootTo12Inches", true))
+	// convert_1_foot_to_12_inches
+	fmt.Println(SnakeCase("shouldSuccessfullyAuthenticateOnV2Api"))
+	// should_successfully_authenticate_on_v2_api
+
+	fmt.Println(KebabCase("v2Counter"))
+	// v2-counter
+	fmt.Println(KebabCase("fooBar2"))
+	// foo-bar2
+	fmt.Println(KebabCase("convert1FootTo12Inches", true))
+	// convert-1-foot-to-12-inches
+	fmt.Println(KebabCase("shouldSuccessfullyAuthenticateOnV2Api"))
+	// should-successfully-authenticate-on-v2-api
 }

@@ -669,83 +669,199 @@ func (*String) Equal(s1, s2 []string) bool {
 	return strings.Join(s1, ",") == strings.Join(s2, ",")
 }
 
-func (*String) preserveCamelCase(input string) string {
-	var isLastCharLower, isLastCharUpper, isLastLastCharUpper bool
-	inputAsRunes := []rune(input)
-
-	for i, c := range inputAsRunes {
-		sc := string(c)
-		matched, _ := regexp.MatchString(`[a-zA-Z]`, sc)
-
-		switch {
-		case isLastCharLower && matched && unicode.ToUpper(c) == c:
-			temp := append([]rune{'-'}, inputAsRunes[i:]...)
-			inputAsRunes = append(inputAsRunes[:i], temp...)
-			isLastCharLower = false
-			isLastLastCharUpper = isLastCharUpper
-			isLastCharUpper = true
-		case isLastCharUpper && isLastLastCharUpper && matched && unicode.ToLower(c) == c:
-			temp := append([]rune{'-'}, inputAsRunes[i-1:]...)
-			inputAsRunes = append(inputAsRunes[:i-1], temp...)
-			isLastLastCharUpper = isLastCharUpper
-			isLastCharUpper = false
-			isLastCharLower = true
-		default:
-			isLastCharLower = (unicode.ToLower(c) == c)
-			isLastLastCharUpper = isLastCharUpper
-			isLastCharUpper = (unicode.ToUpper(c) == c)
-		}
-	}
-
-	return string(inputAsRunes)
-}
-
 // CamelCase convert dash/dot/underscore/space separated string to camelCase
 // pascalCase define whether to uppercase the first character
-func (i *String) CamelCase(input string, pascalCase ...bool) string {
+func (*String) CamelCase(input string, pascalCase ...bool) string {
 	var pCase bool
 	for _, p := range pascalCase {
 		pCase = p
 	}
 
-	postProcess := func(x string) string {
-		if !pCase {
-			return x
+	b := make([]byte, 0, 64)
+	l := len(input)
+	i := 0
+	toUpperNext := false
+
+	for i < l {
+
+		for i < l && !isWord(input[i]) {
+			i++
 		}
-		xAsRunes := []rune(x)
-		xAsRunes[0] = unicode.ToUpper(xAsRunes[0])
-		return string(xAsRunes)
-	}
 
-	inputX := strings.TrimSpace(input)
-
-	if len(inputX) == 0 {
-		return ""
-	}
-
-	if len(inputX) == 1 {
-		if pCase {
-			return strings.ToUpper(inputX)
+		if i < l && (len(b) != 0 || pCase) {
+			toUpperNext = true
 		}
-		return strings.ToLower(inputX)
+
+		for i < l {
+			if c := input[i]; !isUpper(c) {
+				break
+			} else {
+				if toUpperNext {
+					b = append(b, c)
+					toUpperNext = false
+				} else {
+					b = append(b, toLower(c))
+				}
+			}
+			i++
+		}
+
+		for i < l {
+			if c := input[i]; !isTail(c) {
+				break
+			} else {
+				if toUpperNext {
+					b = append(b, toUpper(c))
+					toUpperNext = false
+				} else {
+					b = append(b, c)
+				}
+			}
+			i++
+		}
 	}
 
-	matched, _ := regexp.MatchString(`^[a-z\d]+$`, inputX)
-	if matched {
-		return postProcess(inputX)
-	}
+	return string(b)
+}
 
-	if inputX != strings.ToLower(inputX) {
-		inputX = i.preserveCamelCase(inputX)
-	}
-
-	re, _ := regexp.Compile(`^[_.\- ]+`)
-	inputX = strings.ToLower(re.ReplaceAllString(inputX, ""))
-
-	re2, _ := regexp.Compile(`[_.\- ]+(\w|$)`)
-	inputX = re2.ReplaceAllStringFunc(inputX, func(a string) string {
-		return strings.ToUpper(re.ReplaceAllString(a, ""))
+// Titleize capitalize every word in string
+func (*String) Titleize(input string) string {
+	re, _ := regexp.Compile(`(?:^|\s|-)\S`)
+	return re.ReplaceAllStringFunc(strings.ToLower(input), func(a string) string {
+		return strings.ToUpper(a)
 	})
+}
 
-	return postProcess(inputX)
+// SnakeCase convert string to snake_case
+// separateDigit define whether to separate digit from letter
+func (*String) SnakeCase(input string, separateDigit ...bool) string {
+	var sepDigit bool
+	for _, s := range separateDigit {
+		sepDigit = s
+	}
+
+	b := make([]byte, 0, 64)
+	l := len(input)
+	i := 0
+	const sep = '_'
+
+	for i < l {
+
+		for i < l && !isWord(input[i]) {
+			i++
+		}
+
+		if i < l && len(b) != 0 {
+			b = append(b, sep)
+		}
+
+		for i < l {
+			if c := input[i]; !isUpper(c) {
+				break
+			} else {
+				b = append(b, toLower(c))
+			}
+			i++
+		}
+
+		for i < l {
+			if c := input[i]; !isTail(c) {
+				break
+			} else {
+				if sepDigit && isDigit(c) && i > 1 && !isDigit(input[i-1]) {
+					b = append(b, sep)
+				}
+				b = append(b, c)
+			}
+			i++
+		}
+	}
+
+	return string(b)
+}
+
+// KebabCase convert string to kebab-case
+// separateDigit define whether to separate digit from letter
+func (*String) KebabCase(input string, separateDigit ...bool) string {
+	var sepDigit bool
+	for _, s := range separateDigit {
+		sepDigit = s
+	}
+
+	b := make([]byte, 0, 64)
+	l := len(input)
+	i := 0
+	const sep = '-'
+
+	for i < l {
+
+		for i < l && !isWord(input[i]) {
+			i++
+		}
+
+		if i < l && len(b) != 0 {
+			b = append(b, sep)
+		}
+
+		for i < l {
+			if c := input[i]; !isUpper(c) {
+				break
+			} else {
+				b = append(b, toLower(c))
+			}
+			i++
+		}
+
+		for i < l {
+			if c := input[i]; !isTail(c) {
+				break
+			} else {
+				if sepDigit && isDigit(c) && i > 1 && !isDigit(input[i-1]) {
+					b = append(b, sep)
+				}
+				b = append(b, c)
+			}
+			i++
+		}
+	}
+
+	return string(b)
+}
+
+func isTail(c byte) bool {
+	return isLower(c) || isDigit(c)
+}
+
+func isWord(c byte) bool {
+	return isLetter(c) || isDigit(c)
+}
+
+func isLetter(c byte) bool {
+	return isLower(c) || isUpper(c)
+}
+
+func isUpper(c byte) bool {
+	return c >= 'A' && c <= 'Z'
+}
+
+func isLower(c byte) bool {
+	return c >= 'a' && c <= 'z'
+}
+
+func isDigit(c byte) bool {
+	return c >= '0' && c <= '9'
+}
+
+func toLower(c byte) byte {
+	if isUpper(c) {
+		return c + ('a' - 'A')
+	}
+	return c
+}
+
+func toUpper(c byte) byte {
+	if isLower(c) {
+		return byte(unicode.ToUpper(rune(c)))
+	}
+	return c
 }

@@ -810,7 +810,7 @@ NewString creates a new String instance.
 
 
 
-### <a name="String.CamelCase">func</a> (\*String) [CamelCase](./string.go?s=15813:15880#L705)
+### <a name="String.CamelCase">func</a> (\*String) [CamelCase](./string.go?s=14813:14878#L674)
 ``` go
 func (i *String) CamelCase(input string, pascalCase ...bool) string
 ```
