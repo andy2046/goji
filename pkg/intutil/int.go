@@ -1,17 +1,20 @@
-package goji
+// Package intutil provides functional utils for int.
+package intutil
 
 import (
 	"math/rand"
 	"sort"
 	"strconv"
 	"strings"
+
+	g "github.com/andy2046/goji"
 )
 
 // Int for int type slice.
 type Int struct{}
 
-// IntHelper is the Int interface.
-type IntHelper interface {
+// IInt is the Int interface.
+type IInt interface {
 	Filter(ints []int, predict func(int) bool) []int
 	Find(ints []int, predict func(int) bool) (int, bool)
 	FindIndex(ints []int, predict func(int) bool, fromIndex ...int) int
@@ -62,7 +65,7 @@ func NewInt() *Int {
 	return p
 }
 
-var _ IntHelper = NewInt()
+var _ IInt = NewInt()
 
 // Filter creates a new slice with all elements that pass the predict implemented.
 func (*Int) Filter(ints []int, predict func(int) bool) []int {
@@ -99,9 +102,9 @@ func (*Int) FindIndex(ints []int, predict func(int) bool, fromIndex ...int) int 
 		start = id
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i < n; i++ {
@@ -122,9 +125,9 @@ func (*Int) FindLastIndex(ints []int, predict func(int) bool, fromIndex ...int) 
 		start = id
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i >= 0; i-- {
@@ -163,9 +166,9 @@ func (*Int) IndexOf(ints []int, e int, fromIndex ...int) int {
 		start = id
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i < n; i++ {
@@ -186,9 +189,9 @@ func (*Int) LastIndexOf(ints []int, e int, fromIndex ...int) int {
 		start = id
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i >= 0; i-- {
@@ -274,14 +277,14 @@ func (*Int) Fill(ints []int, value int, startEndIndex ...int) {
 		start, end = startEndIndex[0], startEndIndex[1]
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
-	end = Min(end, n)
+	end = g.Min(end, n)
 	if end < 0 {
-		end = Max(n+end, 0)
+		end = g.Max(n+end, 0)
 	}
 
 	for start < end {
@@ -411,14 +414,14 @@ func (*Int) Slice(ints []int, startEndIndex ...int) []int {
 		start, end = startEndIndex[0], startEndIndex[1]
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
-	end = Min(end, n)
+	end = g.Min(end, n)
 	if end < 0 {
-		end = Max(n+end, 0)
+		end = g.Max(n+end, 0)
 	}
 
 	r := []int{}
@@ -440,7 +443,7 @@ func (*Int) Sort(ints []int, less ...func(int, int) bool) {
 		comp = less[0]
 	}
 
-	sort.Sort(sorter{len: len(ints), swap: swap, less: comp})
+	sort.Sort(g.Sorter{N: len(ints), SwapFunc: swap, LessFunc: comp})
 }
 
 // Shuffle randomizes the order of elements.

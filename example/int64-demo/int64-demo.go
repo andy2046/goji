@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	G "github.com/andy2046/goji"
+	Int64Util "github.com/andy2046/goji/pkg/int64util"
 )
 
 func main() {
-	i := G.NewInt64()
+	i := Int64Util.NewInt64()
 
 	f := func(i int64) int64 { return i + 1 }
 	preFilter := []int64{5, 4, 3}

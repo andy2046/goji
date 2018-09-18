@@ -1,73 +1,74 @@
-package goji
+package float64util
 
 import (
 	"math/rand"
 	"sort"
-	"strconv"
 	"strings"
+
+	g "github.com/andy2046/goji"
+	f "github.com/andy2046/goji/pkg/float32util"
 )
 
-// Int32 for int32 type slice.
-type Int32 struct{}
+// Float64 for float64 type slice.
+type Float64 struct{}
 
-// Int32Helper is the Int32 interface.
-type Int32Helper interface {
-	Min(x, y int32) int32
-	Max(x, y int32) int32
-	Filter(ints []int32, predict func(int32) bool) []int32
-	Find(ints []int32, predict func(int32) bool) (int32, bool)
-	FindIndex(ints []int32, predict func(int32) bool, fromIndex ...int32) int32
-	FindLastIndex(ints []int32, predict func(int32) bool, fromIndex ...int32) int32
-	ForEach(ints []int32, provided func(int32))
-	Includes(ints []int32, e int32) bool
-	IndexOf(ints []int32, e int32, fromIndex ...int32) int32
-	LastIndexOf(ints []int32, e int32, fromIndex ...int32) int32
-	From(ints []int32, mapFn ...func(int32) int32) []int32
-	Of(ints ...int32) []int32
-	Concat(ints ...[]int32) []int32
-	Every(ints []int32, predict func(int32) bool) bool
-	Some(ints []int32, predict func(int32) bool) bool
-	Fill(ints []int32, value int32, startEndIndex ...int32)
-	Join(ints []int32, sep ...string) string
-	Map(ints []int32, m func(int32) int32) []int32
-	Pop(ints []int32) (int32, bool, []int32)
-	Push(ints []int32, es ...int32) (int32, []int32)
-	Reduce(ints []int32, accum func(int32, int32) int32, init ...int32) int32
-	ReduceRight(ints []int32, accum func(int32, int32) int32, init ...int32) int32
-	Reverse(ints []int32) []int32
-	Shift(ints []int32) (int32, bool, []int32)
-	Unshift(ints []int32, es ...int32) (int32, []int32)
-	Slice(ints []int32, startEndIndex ...int32) []int32
-	Sort(ints []int32, less ...func(int, int) bool)
-	Shuffle(ints []int32)
-	String(ints []int32) string
-	Drop(ints []int32, n ...int32) []int32
-	Head(ints []int32) (int32, bool)
-	Initial(ints []int32) []int32
-	Last(ints []int32) (int32, bool)
-	Nth(ints []int32, n ...int32) (int32, bool)
-	Pull(ints []int32, vs ...int32) []int32
-	Difference(ints []int32, vs ...[]int32) []int32
-	Intersection(vs ...[]int32) []int32
-	Without(ints []int32, vs ...int32) []int32
-	Remove(ints []int32, predict func(int32) bool) []int32
-	Tail(ints []int32) []int32
-	Take(ints []int32, n ...int32) []int32
-	Union(ints ...[]int32) []int32
-	Uniq(ints []int32) []int32
-	Equal(s1, s2 []int32) bool
+// IFloat64 is the Float64 interface.
+type IFloat64 interface {
+	Min(x, y float64) float64
+	Max(x, y float64) float64
+	Filter(ints []float64, predict func(float64) bool) []float64
+	Find(ints []float64, predict func(float64) bool) (float64, bool)
+	FindIndex(ints []float64, predict func(float64) bool, fromIndex ...int) int
+	FindLastIndex(ints []float64, predict func(float64) bool, fromIndex ...int) int
+	ForEach(ints []float64, provided func(float64))
+	Includes(ints []float64, e float64) bool
+	IndexOf(ints []float64, e float64, fromIndex ...int) int
+	LastIndexOf(ints []float64, e float64, fromIndex ...int) int
+	From(ints []float64, mapFn ...func(float64) float64) []float64
+	Of(ints ...float64) []float64
+	Concat(ints ...[]float64) []float64
+	Every(ints []float64, predict func(float64) bool) bool
+	Some(ints []float64, predict func(float64) bool) bool
+	Fill(ints []float64, value float64, startEndIndex ...int)
+	Join(ints []float64, sep ...string) string
+	Map(ints []float64, m func(float64) float64) []float64
+	Pop(ints []float64) (float64, bool, []float64)
+	Push(ints []float64, es ...float64) (int, []float64)
+	Reduce(ints []float64, accum func(float64, float64) float64, init ...float64) float64
+	ReduceRight(ints []float64, accum func(float64, float64) float64, init ...float64) float64
+	Reverse(ints []float64) []float64
+	Shift(ints []float64) (float64, bool, []float64)
+	Unshift(ints []float64, es ...float64) (int, []float64)
+	Slice(ints []float64, startEndIndex ...int) []float64
+	Sort(ints []float64, less ...func(int, int) bool)
+	Shuffle(ints []float64)
+	String(ints []float64) string
+	Drop(ints []float64, n ...int) []float64
+	Head(ints []float64) (float64, bool)
+	Initial(ints []float64) []float64
+	Last(ints []float64) (float64, bool)
+	Nth(ints []float64, n ...int) (float64, bool)
+	Pull(ints []float64, vs ...float64) []float64
+	Difference(ints []float64, vs ...[]float64) []float64
+	Intersection(vs ...[]float64) []float64
+	Without(ints []float64, vs ...float64) []float64
+	Remove(ints []float64, predict func(float64) bool) []float64
+	Tail(ints []float64) []float64
+	Take(ints []float64, n ...int) []float64
+	Union(ints ...[]float64) []float64
+	Uniq(ints []float64) []float64
+	Equal(s1, s2 []float64) bool
 }
 
-// NewInt32 creates a new Int32 instance.
-func NewInt32() *Int32 {
-	var p *Int32
-	return p
+// NewFloat64 creates a new Float64 instance.
+func NewFloat64() *Float64 {
+	return &Float64{}
 }
 
-var _ Int32Helper = NewInt32()
+var _ IFloat64 = NewFloat64()
 
 // Min returns the smaller of x or y.
-func (*Int32) Min(x, y int32) int32 {
+func (*Float64) Min(x, y float64) float64 {
 	if x < y {
 		return x
 	}
@@ -75,7 +76,7 @@ func (*Int32) Min(x, y int32) int32 {
 }
 
 // Max returns the larger of x or y.
-func (*Int32) Max(x, y int32) int32 {
+func (*Float64) Max(x, y float64) float64 {
 	if x > y {
 		return x
 	}
@@ -83,8 +84,8 @@ func (*Int32) Max(x, y int32) int32 {
 }
 
 // Filter creates a new slice with all elements that pass the predict implemented.
-func (*Int32) Filter(ints []int32, predict func(int32) bool) []int32 {
-	var r []int32
+func (*Float64) Filter(ints []float64, predict func(float64) bool) []float64 {
+	var r []float64
 
 	for _, v := range ints {
 		if ok := predict(v); ok {
@@ -97,7 +98,7 @@ func (*Int32) Filter(ints []int32, predict func(int32) bool) []int32 {
 
 // Find returns the value of the first element in the slice that satisfies the provided predict function.
 // otherwise false is returned.
-func (*Int32) Find(ints []int32, predict func(int32) bool) (int32, bool) {
+func (*Float64) Find(ints []float64, predict func(float64) bool) (float64, bool) {
 	for _, v := range ints {
 		if ok := predict(v); ok {
 			return v, true
@@ -109,17 +110,17 @@ func (*Int32) Find(ints []int32, predict func(int32) bool) (int32, bool) {
 
 // FindIndex returns the index of the first element in the slice that satisfies the provided predict function.
 // otherwise -1 is returned.
-func (i *Int32) FindIndex(ints []int32, predict func(int32) bool, fromIndex ...int32) int32 {
-	var start int32
-	var n = int32(len(ints))
+func (*Float64) FindIndex(ints []float64, predict func(float64) bool, fromIndex ...int) int {
+	var start int
+	var n = len(ints)
 
 	for _, id := range fromIndex {
 		start = id
 	}
 
-	start = i.Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = i.Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i < n; i++ {
@@ -132,17 +133,17 @@ func (i *Int32) FindIndex(ints []int32, predict func(int32) bool, fromIndex ...i
 }
 
 // FindLastIndex  is like FindIndex except that it iterates over elements from right to left.
-func (i *Int32) FindLastIndex(ints []int32, predict func(int32) bool, fromIndex ...int32) int32 {
-	var n = int32(len(ints))
+func (*Float64) FindLastIndex(ints []float64, predict func(float64) bool, fromIndex ...int) int {
+	var n = len(ints)
 	var start = n - 1
 
 	for _, id := range fromIndex {
 		start = id
 	}
 
-	start = i.Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = i.Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i >= 0; i-- {
@@ -155,14 +156,14 @@ func (i *Int32) FindLastIndex(ints []int32, predict func(int32) bool, fromIndex 
 }
 
 // ForEach executes a provided function once for each slice element.
-func (*Int32) ForEach(ints []int32, provided func(int32)) {
+func (*Float64) ForEach(ints []float64, provided func(float64)) {
 	for _, v := range ints {
 		provided(v)
 	}
 }
 
 // Includes determines whether a slice includes a certain element, returning true or false.
-func (*Int32) Includes(ints []int32, e int32) bool {
+func (*Float64) Includes(ints []float64, e float64) bool {
 	for _, v := range ints {
 		if e == v {
 			return true
@@ -173,17 +174,17 @@ func (*Int32) Includes(ints []int32, e int32) bool {
 }
 
 // IndexOf returns the first index at which a given element can be found in the slice, or -1 if it is not present.
-func (i *Int32) IndexOf(ints []int32, e int32, fromIndex ...int32) int32 {
-	var start int32
-	var n = int32(len(ints))
+func (*Float64) IndexOf(ints []float64, e float64, fromIndex ...int) int {
+	var start int
+	var n = len(ints)
 
 	for _, id := range fromIndex {
 		start = id
 	}
 
-	start = i.Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = i.Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i < n; i++ {
@@ -196,17 +197,17 @@ func (i *Int32) IndexOf(ints []int32, e int32, fromIndex ...int32) int32 {
 }
 
 // LastIndexOf returns the last index at which a given element can be found in the slice, or -1 if it is not present.
-func (i *Int32) LastIndexOf(ints []int32, e int32, fromIndex ...int32) int32 {
-	var start int32
-	var n = int32(len(ints))
+func (*Float64) LastIndexOf(ints []float64, e float64, fromIndex ...int) int {
+	var start int
+	var n = len(ints)
 
 	for _, id := range fromIndex {
 		start = id
 	}
 
-	start = i.Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = i.Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i >= 0; i-- {
@@ -219,9 +220,9 @@ func (i *Int32) LastIndexOf(ints []int32, e int32, fromIndex ...int32) int32 {
 }
 
 // From creates a new, shallow-copied slice.
-func (*Int32) From(ints []int32, mapFn ...func(int32) int32) []int32 {
-	r := make([]int32, len(ints))
-	f := func(i int32) int32 {
+func (*Float64) From(ints []float64, mapFn ...func(float64) float64) []float64 {
+	r := make([]float64, len(ints))
+	f := func(i float64) float64 {
 		v := i
 		for _, handler := range mapFn {
 			v = handler(v)
@@ -237,8 +238,8 @@ func (*Int32) From(ints []int32, mapFn ...func(int32) int32) []int32 {
 }
 
 // Of creates a new slice instance with a variable number of arguments.
-func (*Int32) Of(ints ...int32) []int32 {
-	r := make([]int32, len(ints))
+func (*Float64) Of(ints ...float64) []float64 {
+	r := make([]float64, len(ints))
 
 	for i, v := range ints {
 		r[i] = v
@@ -247,8 +248,8 @@ func (*Int32) Of(ints ...int32) []int32 {
 }
 
 // Concat merges two or more slices.
-func (*Int32) Concat(ints ...[]int32) []int32 {
-	var r []int32
+func (*Float64) Concat(ints ...[]float64) []float64 {
+	var r []float64
 
 	for _, v := range ints {
 		r = append(r, v...)
@@ -258,7 +259,7 @@ func (*Int32) Concat(ints ...[]int32) []int32 {
 }
 
 // Every tests whether all elements in the slice pass the predict implemented.
-func (*Int32) Every(ints []int32, predict func(int32) bool) bool {
+func (*Float64) Every(ints []float64, predict func(float64) bool) bool {
 	for _, v := range ints {
 		if ok := predict(v); !ok {
 			return false
@@ -269,7 +270,7 @@ func (*Int32) Every(ints []int32, predict func(int32) bool) bool {
 }
 
 // Some tests whether at least one element in the slice pass the predict implemented.
-func (*Int32) Some(ints []int32, predict func(int32) bool) bool {
+func (*Float64) Some(ints []float64, predict func(float64) bool) bool {
 	for _, v := range ints {
 		if ok := predict(v); ok {
 			return true
@@ -281,9 +282,9 @@ func (*Int32) Some(ints []int32, predict func(int32) bool) bool {
 
 // Fill fills all the elements of a slice from a start index to an end index with a static value.
 // the end index is not included.
-func (i *Int32) Fill(ints []int32, value int32, startEndIndex ...int32) {
-	var n = int32(len(ints))
-	var start, end int32 = 0, n
+func (*Float64) Fill(ints []float64, value float64, startEndIndex ...int) {
+	var n = len(ints)
+	var start, end int = 0, n
 
 	switch len(startEndIndex) {
 	case 1:
@@ -292,14 +293,14 @@ func (i *Int32) Fill(ints []int32, value int32, startEndIndex ...int32) {
 		start, end = startEndIndex[0], startEndIndex[1]
 	}
 
-	start = i.Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = i.Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
-	end = i.Min(end, n)
+	end = g.Min(end, n)
 	if end < 0 {
-		end = i.Max(n+end, 0)
+		end = g.Max(n+end, 0)
 	}
 
 	for start < end {
@@ -309,11 +310,26 @@ func (i *Int32) Fill(ints []int32, value int32, startEndIndex ...int32) {
 }
 
 // Join joins all elements of a slice into a string.
-func (*Int32) Join(ints []int32, sep ...string) string {
+func (*Float64) Join(ints []float64, sep ...string) string {
 	v := make([]string, len(ints))
 
 	for i, t := range ints {
-		v[i] = strconv.FormatInt(int64(t), 10)
+		v[i] = f.FloatToString(float64(t))
+	}
+
+	s := ","
+	for _, se := range sep {
+		s = se
+	}
+	return strings.Join(v, s)
+}
+
+// JoinWithPrec joins all elements of a slice into a string with precision.
+func (*Float64) JoinWithPrec(ints []float64, prec int, sep ...string) string {
+	v := make([]string, len(ints))
+
+	for i, t := range ints {
+		v[i] = f.FloatToStringWithPrec(float64(t), prec)
 	}
 
 	s := ","
@@ -324,8 +340,8 @@ func (*Int32) Join(ints []int32, sep ...string) string {
 }
 
 // Map creates a new slice with the results of calling a provided function on every element in the calling slice.
-func (*Int32) Map(ints []int32, m func(int32) int32) []int32 {
-	r := make([]int32, len(ints))
+func (*Float64) Map(ints []float64, m func(float64) float64) []float64 {
+	r := make([]float64, len(ints))
 
 	for i, v := range ints {
 		r[i] = m(v)
@@ -335,29 +351,29 @@ func (*Int32) Map(ints []int32, m func(int32) int32) []int32 {
 }
 
 // Pop removes the last element from a slice and returns that element.
-func (*Int32) Pop(ints []int32) (int32, bool, []int32) {
+func (*Float64) Pop(ints []float64) (float64, bool, []float64) {
 	n := len(ints)
 	if n == 0 {
-		return 0, false, []int32{}
+		return 0, false, []float64{}
 	}
 	return ints[n-1], true, ints[:n-1]
 }
 
 // Push adds one or more elements to the end of a slice and returns the new length of the slice.
-func (*Int32) Push(ints []int32, es ...int32) (int32, []int32) {
-	var m = int32(len(ints))
-	n := m + int32(len(es))
-	r := make([]int32, n)
+func (*Float64) Push(ints []float64, es ...float64) (int, []float64) {
+	var m = len(ints)
+	n := m + len(es)
+	r := make([]float64, n)
 	copy(r, ints)
 	for i, v := range es {
-		r[int32(i)+m] = v
+		r[i+m] = v
 	}
 	return n, r
 }
 
 // Reduce applies a function against each element in the slice to reduce it to a single value.
-func (*Int32) Reduce(ints []int32, accum func(int32, int32) int32, init ...int32) int32 {
-	var iv int32
+func (*Float64) Reduce(ints []float64, accum func(float64, float64) float64, init ...float64) float64 {
+	var iv float64
 	for _, v := range init {
 		iv = v
 	}
@@ -368,20 +384,20 @@ func (*Int32) Reduce(ints []int32, accum func(int32, int32) int32, init ...int32
 }
 
 // ReduceRight applies a function against each value of the slice (from right-to-left) to reduce it to a single value.
-func (*Int32) ReduceRight(ints []int32, accum func(int32, int32) int32, init ...int32) int32 {
-	n := int32(len(ints)) - 1
-	var iv int32
+func (*Float64) ReduceRight(ints []float64, accum func(float64, float64) float64, init ...float64) float64 {
+	n := len(ints) - 1
+	var iv float64
 	for _, v := range init {
 		iv = v
 	}
 	for i := range ints {
-		iv = accum(iv, ints[n-int32(i)])
+		iv = accum(iv, ints[n-i])
 	}
 	return iv
 }
 
 // Reverse reverses a slice.
-func (*Int32) Reverse(ints []int32) []int32 {
+func (*Float64) Reverse(ints []float64) []float64 {
 	len := len(ints) - 1
 	for i := 0; i < len; i++ {
 		ints[i], ints[len] = ints[len], ints[i]
@@ -391,22 +407,22 @@ func (*Int32) Reverse(ints []int32) []int32 {
 }
 
 // Shift removes the first element from a slice and returns that element.
-func (*Int32) Shift(ints []int32) (int32, bool, []int32) {
+func (*Float64) Shift(ints []float64) (float64, bool, []float64) {
 	n := len(ints)
 	if n == 0 {
-		return 0, false, []int32{}
+		return 0, false, []float64{}
 	}
 	return ints[0], true, ints[1:]
 }
 
 // Unshift adds one or more elements to the beginning of a slice and returns the new length of the slice.
-func (*Int32) Unshift(ints []int32, es ...int32) (int32, []int32) {
-	m := int32(len(ints))
-	n := int32(len(es))
-	r := make([]int32, n+m)
+func (*Float64) Unshift(ints []float64, es ...float64) (int, []float64) {
+	m := len(ints)
+	n := len(es)
+	r := make([]float64, n+m)
 
 	for i, v := range ints {
-		r[int32(i)+n] = v
+		r[i+n] = v
 	}
 
 	for i, v := range es {
@@ -418,9 +434,9 @@ func (*Int32) Unshift(ints []int32, es ...int32) (int32, []int32) {
 
 // Slice returns a portion of a slice selected from start to end (end not included).
 // start and end indexes are optional, default to zero and length of the slice.
-func (i *Int32) Slice(ints []int32, startEndIndex ...int32) []int32 {
-	n := int32(len(ints))
-	var start, end int32 = 0, n
+func (*Float64) Slice(ints []float64, startEndIndex ...int) []float64 {
+	n := len(ints)
+	var start, end int = 0, n
 
 	switch len(startEndIndex) {
 	case 1:
@@ -429,17 +445,17 @@ func (i *Int32) Slice(ints []int32, startEndIndex ...int32) []int32 {
 		start, end = startEndIndex[0], startEndIndex[1]
 	}
 
-	start = i.Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = i.Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
-	end = i.Min(end, n)
+	end = g.Min(end, n)
 	if end < 0 {
-		end = i.Max(n+end, 0)
+		end = g.Max(n+end, 0)
 	}
 
-	r := []int32{}
+	r := []float64{}
 
 	for start < end {
 		r = append(r, ints[start])
@@ -450,7 +466,7 @@ func (i *Int32) Slice(ints []int32, startEndIndex ...int32) []int32 {
 }
 
 // Sort sorts elements.
-func (*Int32) Sort(ints []int32, less ...func(int, int) bool) {
+func (*Float64) Sort(ints []float64, less ...func(int, int) bool) {
 	swap := func(i, j int) { ints[i], ints[j] = ints[j], ints[i] }
 	comp := func(i, j int) bool { return ints[i] < ints[j] }
 
@@ -458,39 +474,39 @@ func (*Int32) Sort(ints []int32, less ...func(int, int) bool) {
 		comp = less[0]
 	}
 
-	sort.Sort(sorter{len: len(ints), swap: swap, less: comp})
+	sort.Sort(g.Sorter{N: len(ints), SwapFunc: swap, LessFunc: comp})
 }
 
 // Shuffle randomizes the order of elements.
-func (*Int32) Shuffle(ints []int32) {
+func (*Float64) Shuffle(ints []float64) {
 	swap := func(i, j int) { ints[i], ints[j] = ints[j], ints[i] }
 	rand.Shuffle(len(ints), swap)
 }
 
 // String returns a string representing the specified slice.
-func (i *Int32) String(ints []int32) string {
+func (i *Float64) String(ints []float64) string {
 	return i.Join(ints)
 }
 
 // Drop creates a slice with n elements dropped from the beginning.
-func (*Int32) Drop(ints []int32, n ...int32) []int32 {
-	var start int32 = 1
-	lenin := int32(len(ints))
+func (*Float64) Drop(ints []float64, n ...int) []float64 {
+	var start = 1
+	lenin := len(ints)
 
 	if len(n) > 0 && n[0] >= 0 {
 		start = n[0]
 	}
 
 	if start >= lenin {
-		return []int32{}
+		return []float64{}
 	}
-	r := make([]int32, lenin-start)
+	r := make([]float64, lenin-start)
 	copy(r, ints[start:])
 	return r
 }
 
 // Head gets the first element of slice.
-func (*Int32) Head(ints []int32) (int32, bool) {
+func (*Float64) Head(ints []float64) (float64, bool) {
 	if len(ints) > 0 {
 		return ints[0], true
 	}
@@ -499,17 +515,17 @@ func (*Int32) Head(ints []int32) (int32, bool) {
 }
 
 // Initial gets all but the last element of slice.
-func (*Int32) Initial(ints []int32) []int32 {
+func (*Float64) Initial(ints []float64) []float64 {
 	n := len(ints)
 	if n > 1 {
 		return ints[:n-1]
 	}
 
-	return []int32{}
+	return []float64{}
 }
 
 // Last gets the last element of slice.
-func (*Int32) Last(ints []int32) (int32, bool) {
+func (*Float64) Last(ints []float64) (float64, bool) {
 	n := len(ints)
 	if n > 0 {
 		return ints[n-1], true
@@ -520,9 +536,9 @@ func (*Int32) Last(ints []int32) (int32, bool) {
 
 // Nth gets the element at index n of slice.
 // if n is negative, the nth element from the end is returned.
-func (*Int32) Nth(ints []int32, n ...int32) (int32, bool) {
-	var start int32
-	lenin := int32(len(ints))
+func (*Float64) Nth(ints []float64, n ...int) (float64, bool) {
+	var start int
+	lenin := len(ints)
 
 	for _, i := range n {
 		start = i
@@ -540,8 +556,8 @@ func (*Int32) Nth(ints []int32, n ...int32) (int32, bool) {
 }
 
 // Pull removes all given values from slice.
-func (i *Int32) Pull(ints []int32, vs ...int32) []int32 {
-	var r []int32
+func (i *Float64) Pull(ints []float64, vs ...float64) []float64 {
+	var r []float64
 	for _, v := range ints {
 		if ok := i.Includes(vs, v); !ok {
 			r = append(r, v)
@@ -551,10 +567,10 @@ func (i *Int32) Pull(ints []int32, vs ...int32) []int32 {
 }
 
 // Difference creates a slice of values not included in the other given slices.
-func (i *Int32) Difference(ints []int32, vs ...[]int32) []int32 {
-	var r []int32
-	var counter int32
-	n := int32(len(vs))
+func (i *Float64) Difference(ints []float64, vs ...[]float64) []float64 {
+	var r []float64
+	var counter int
+	n := len(vs)
 
 	for _, t := range ints {
 		counter = 0
@@ -571,10 +587,10 @@ func (i *Int32) Difference(ints []int32, vs ...[]int32) []int32 {
 }
 
 // Intersection creates a slice of unique values that are included in all given slices.
-func (i *Int32) Intersection(vs ...[]int32) []int32 {
-	var r []int32
-	n := int32(len(vs))
-	var counter int32
+func (i *Float64) Intersection(vs ...[]float64) []float64 {
+	var r []float64
+	n := len(vs)
+	var counter int
 
 	if n == 0 {
 		return r
@@ -585,7 +601,7 @@ func (i *Int32) Intersection(vs ...[]int32) []int32 {
 
 	for _, t := range vs[0] {
 		counter = 0
-		for j := int32(1); j < n; j++ {
+		for j := 1; j < n; j++ {
 			if ok := i.Includes(vs[j], t); ok {
 				counter++
 			}
@@ -599,13 +615,13 @@ func (i *Int32) Intersection(vs ...[]int32) []int32 {
 }
 
 // Without creates a slice excluding all given values.
-func (i *Int32) Without(ints []int32, vs ...int32) []int32 {
+func (i *Float64) Without(ints []float64, vs ...float64) []float64 {
 	return i.Pull(ints, vs...)
 }
 
 // Remove removes all elements from slice that predicate returns truthy for.
-func (*Int32) Remove(ints []int32, predict func(int32) bool) []int32 {
-	var r []int32
+func (*Float64) Remove(ints []float64, predict func(float64) bool) []float64 {
+	var r []float64
 
 	for _, v := range ints {
 		if ok := predict(v); !ok {
@@ -617,19 +633,19 @@ func (*Int32) Remove(ints []int32, predict func(int32) bool) []int32 {
 }
 
 // Tail gets all but the first element of slice.
-func (*Int32) Tail(ints []int32) []int32 {
+func (*Float64) Tail(ints []float64) []float64 {
 	n := len(ints)
 	if n > 1 {
 		return ints[1:]
 	}
 
-	return []int32{}
+	return []float64{}
 }
 
 // Take creates a slice with n elements taken from the beginning.
-func (*Int32) Take(ints []int32, n ...int32) []int32 {
-	var start int32 = 1
-	lenin := int32(len(ints))
+func (*Float64) Take(ints []float64, n ...int) []float64 {
+	var start = 1
+	lenin := len(ints)
 
 	if len(n) > 0 && n[0] >= 0 {
 		start = n[0]
@@ -643,8 +659,8 @@ func (*Int32) Take(ints []int32, n ...int32) []int32 {
 }
 
 // Union creates a slice of unique values, in order, from all given slices.
-func (i *Int32) Union(ints ...[]int32) []int32 {
-	var r []int32
+func (i *Float64) Union(ints ...[]float64) []float64 {
+	var r []float64
 	for _, vs := range ints {
 		for _, v := range vs {
 			if ok := i.Includes(r, v); !ok {
@@ -656,8 +672,8 @@ func (i *Int32) Union(ints ...[]int32) []int32 {
 }
 
 // Uniq creates a duplicate-free version of a slice.
-func (i *Int32) Uniq(ints []int32) []int32 {
-	var r []int32
+func (i *Float64) Uniq(ints []float64) []float64 {
+	var r []float64
 	for _, v := range ints {
 		if ok := i.Includes(r, v); !ok {
 			r = append(r, v)
@@ -667,7 +683,7 @@ func (i *Int32) Uniq(ints []int32) []int32 {
 }
 
 // Equal performs a deep comparison between two slice values.
-func (*Int32) Equal(s1, s2 []int32) bool {
+func (*Float64) Equal(s1, s2 []float64) bool {
 	if len(s1) != len(s2) {
 		return false
 	}

@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	G "github.com/andy2046/goji"
+	Int32Util "github.com/andy2046/goji/pkg/int32util"
 )
 
 func main() {
-	i := G.NewInt32()
+	i := Int32Util.NewInt32()
 
 	f := func(i int32) int32 { return i + 1 }
 	preFilter := []int32{5, 4, 3}

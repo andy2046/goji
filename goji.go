@@ -29,21 +29,22 @@ func Range(end int) []struct{} {
 	return make([]struct{}, end)
 }
 
-type sorter struct {
-	len  int
-	swap func(i, j int)
-	less func(i, j int) bool
+// Sorter implements Sort interface.
+type Sorter struct {
+	N        int
+	SwapFunc func(i, j int)
+	LessFunc func(i, j int) bool
 }
 
-func (x sorter) Len() int           { return x.len }
-func (x sorter) Swap(i, j int)      { x.swap(i, j) }
-func (x sorter) Less(i, j int) bool { return x.less(i, j) }
+func (x Sorter) Len() int           { return x.N }
+func (x Sorter) Swap(i, j int)      { x.SwapFunc(i, j) }
+func (x Sorter) Less(i, j int) bool { return x.LessFunc(i, j) }
 
 // Sort sorts elements, n is the number of elements.
 // less compares the elements with indexes i and j.
 // swap swaps the elements with indexes i and j.
 func Sort(n int, swap func(int, int), less func(int, int) bool) {
-	sort.Sort(sorter{len: n, swap: swap, less: less})
+	sort.Sort(Sorter{N: n, SwapFunc: swap, LessFunc: less})
 }
 
 // Reverse reverses an array/slice, n is the number of elements.

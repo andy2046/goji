@@ -1,4 +1,5 @@
-package goji
+// Package strutil provides functional utils for string.
+package strutil
 
 import (
 	"math/rand"
@@ -6,13 +7,15 @@ import (
 	"sort"
 	"strings"
 	"unicode"
+
+	g "github.com/andy2046/goji"
 )
 
 // String for string type slice.
 type String struct{}
 
-// StringHelper is the String interface.
-type StringHelper interface {
+// IString is the String interface.
+type IString interface {
 	Min(x, y string) string
 	Max(x, y string) string
 	Filter(ints []string, predict func(string) bool) []string
@@ -64,7 +67,7 @@ func NewString() *String {
 	return &String{}
 }
 
-var _ StringHelper = NewString()
+var _ IString = NewString()
 
 // Min returns the smaller of x or y.
 func (*String) Min(x, y string) string {
@@ -117,9 +120,9 @@ func (*String) FindIndex(ints []string, predict func(string) bool, fromIndex ...
 		start = id
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i < n; i++ {
@@ -140,9 +143,9 @@ func (*String) FindLastIndex(ints []string, predict func(string) bool, fromIndex
 		start = id
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i >= 0; i-- {
@@ -181,9 +184,9 @@ func (*String) IndexOf(ints []string, e string, fromIndex ...int) int {
 		start = id
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i < n; i++ {
@@ -204,9 +207,9 @@ func (*String) LastIndexOf(ints []string, e string, fromIndex ...int) int {
 		start = id
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
 	for i := start; i >= 0; i-- {
@@ -292,14 +295,14 @@ func (*String) Fill(ints []string, value string, startEndIndex ...int) {
 		start, end = startEndIndex[0], startEndIndex[1]
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
-	end = Min(end, n)
+	end = g.Min(end, n)
 	if end < 0 {
-		end = Max(n+end, 0)
+		end = g.Max(n+end, 0)
 	}
 
 	for start < end {
@@ -423,14 +426,14 @@ func (*String) Slice(ints []string, startEndIndex ...int) []string {
 		start, end = startEndIndex[0], startEndIndex[1]
 	}
 
-	start = Min(start, n)
+	start = g.Min(start, n)
 	if start < 0 {
-		start = Max(n+start, 0)
+		start = g.Max(n+start, 0)
 	}
 
-	end = Min(end, n)
+	end = g.Min(end, n)
 	if end < 0 {
-		end = Max(n+end, 0)
+		end = g.Max(n+end, 0)
 	}
 
 	r := []string{}
@@ -452,7 +455,7 @@ func (*String) Sort(ints []string, less ...func(int, int) bool) {
 		comp = less[0]
 	}
 
-	sort.Sort(sorter{len: len(ints), swap: swap, less: comp})
+	sort.Sort(g.Sorter{N: len(ints), SwapFunc: swap, LessFunc: comp})
 }
 
 // Shuffle randomizes the order of elements.

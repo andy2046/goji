@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	G "github.com/andy2046/goji"
+	IntUtil "github.com/andy2046/goji/pkg/intutil"
 )
 
 func main() {
-	i := G.NewInt()
+	i := IntUtil.NewInt()
 
 	f := func(i int) int { return i + 1 }
 	preFilter := []int{5, 4, 3}

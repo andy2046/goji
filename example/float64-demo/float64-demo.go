@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	G "github.com/andy2046/goji"
+	Float64Util "github.com/andy2046/goji/pkg/float64util"
 )
 
 func main() {
-	i := G.NewFloat64()
+	i := Float64Util.NewFloat64()
 
 	f := func(i float64) float64 { return i + 1 }
 	preFilter := []float64{5, 4, 3}

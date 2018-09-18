@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	G "github.com/andy2046/goji"
+	StrUtil "github.com/andy2046/goji/pkg/strutil"
 )
 
 func main() {
-	i := G.NewString()
+	i := StrUtil.NewString()
 
 	f := func(i string) string { return i + "-" }
 	preFilter := []string{"a", "b", "c"}

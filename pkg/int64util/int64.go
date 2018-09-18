@@ -1,17 +1,19 @@
-package goji
+package int64util
 
 import (
 	"math/rand"
 	"sort"
 	"strconv"
 	"strings"
+
+	g "github.com/andy2046/goji"
 )
 
 // Int64 for int64 type slice.
 type Int64 struct{}
 
-// Int64Helper is the Int64 interface.
-type Int64Helper interface {
+// IInt64 is the Int64 interface.
+type IInt64 interface {
 	Min(x, y int64) int64
 	Max(x, y int64) int64
 	Filter(ints []int64, predict func(int64) bool) []int64
@@ -64,7 +66,7 @@ func NewInt64() *Int64 {
 	return p
 }
 
-var _ Int64Helper = NewInt64()
+var _ IInt64 = NewInt64()
 
 // Min returns the smaller of x or y.
 func (*Int64) Min(x, y int64) int64 {
@@ -458,7 +460,7 @@ func (*Int64) Sort(ints []int64, less ...func(int, int) bool) {
 		comp = less[0]
 	}
 
-	sort.Sort(sorter{len: len(ints), swap: swap, less: comp})
+	sort.Sort(g.Sorter{N: len(ints), SwapFunc: swap, LessFunc: comp})
 }
 
 // Shuffle randomizes the order of elements.
